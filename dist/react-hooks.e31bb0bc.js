@@ -24136,14 +24136,37 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"index.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"ColorInfo.js":[function(require,module,exports) {
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ColorInfo = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ColorInfo = function ColorInfo(props) {
+  return _react.default.createElement("div", null, _react.default.createElement("div", null, props.hsl), _react.default.createElement("div", null, props.hsv), _react.default.createElement("img", {
+    alt: "color image",
+    src: props.image
+  }));
+};
+
+exports.ColorInfo = ColorInfo;
+},{"react":"node_modules/react/index.js"}],"FetchHex.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FetchHex = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _reactDom = _interopRequireDefault(require("react-dom"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _ColorInfo = require("./ColorInfo.js");
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -24155,14 +24178,7 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function ColorInfo(props) {
-  return _react.default.createElement("div", null, _react.default.createElement("div", null, props.hsl), _react.default.createElement("div", null, props.hsv), _react.default.createElement("img", {
-    alt: "color image",
-    src: props.image
-  }));
-}
-
-function FetchHex() {
+var FetchHex = function FetchHex() {
   var _useState = (0, _react.useState)("FFFFFF"),
       _useState2 = _slicedToArray(_useState, 2),
       name = _useState2[0],
@@ -24217,7 +24233,7 @@ function FetchHex() {
   if (state === "Loading") {
     content = _react.default.createElement("div", null, "Loading...");
   } else if (state === "Ready") {
-    content = _react.default.createElement(ColorInfo, {
+    content = _react.default.createElement(_ColorInfo.ColorInfo, {
       hsl: colorData.hsl.value,
       hsv: colorData.hsv.value,
       image: colorData.image.bare
@@ -24230,10 +24246,22 @@ function FetchHex() {
     value: name,
     onChange: handleChange
   }), content);
-}
+};
 
-_reactDom.default.render(_react.default.createElement(FetchHex, null), document.getElementById("root"));
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js"}],"../../.nvm/versions/node/v9.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+exports.FetchHex = FetchHex;
+},{"react":"node_modules/react/index.js","./ColorInfo.js":"ColorInfo.js"}],"index.js":[function(require,module,exports) {
+"use strict";
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactDom = _interopRequireDefault(require("react-dom"));
+
+var _FetchHex = require("./FetchHex.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_reactDom.default.render(_react.default.createElement(_FetchHex.FetchHex, null), document.getElementById("root"));
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./FetchHex.js":"FetchHex.js"}],"../../.nvm/versions/node/v9.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -24260,7 +24288,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41503" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38905" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
