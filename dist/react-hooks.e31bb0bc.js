@@ -24155,23 +24155,84 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function Name() {
-  var _useState = (0, _react.useState)("Robert"),
+function ColorInfo(props) {
+  return _react.default.createElement("div", null, _react.default.createElement("div", null, props.hsl), _react.default.createElement("div", null, props.hsv), _react.default.createElement("img", {
+    alt: "color image",
+    src: props.image
+  }));
+}
+
+function FetchHex() {
+  var _useState = (0, _react.useState)("FFFFFF"),
       _useState2 = _slicedToArray(_useState, 2),
       name = _useState2[0],
       setName = _useState2[1];
 
+  var _useState3 = (0, _react.useState)("toLoad"),
+      _useState4 = _slicedToArray(_useState3, 2),
+      state = _useState4[0],
+      setState = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({}),
+      _useState6 = _slicedToArray(_useState5, 2),
+      colorData = _useState6[0],
+      setColorData = _useState6[1];
+
   var handleChange = function handleChange(e) {
+    if (/^[a-fA-F\d]{6}$/.test(e.target.value)) {
+      setState("toLoad");
+    }
+
     setName(e.target.value);
   };
+
+  var myController = new AbortController();
+  var mySignal = myController.signal;
+
+  var fetchColor = function fetchColor(color) {
+    fetch("http://www.thecolorapi.com/id?hex=".concat(name), {
+      signal: mySignal
+    }).then(function (response) {
+      setState("Loading");
+      return response.json();
+    }).then(function (res) {
+      setColorData(res);
+      setState("Ready");
+    }).catch(function (err) {
+      setState("error");
+    });
+  };
+
+  (0, _react.useEffect)(function () {
+    if (state === "toLoad") {
+      fetchColor();
+    }
+
+    return function cleanup() {
+      myController.abort();
+    };
+  });
+  var content = null;
+
+  if (state === "Loading") {
+    content = _react.default.createElement("div", null, "Loading...");
+  } else if (state === "Ready") {
+    content = _react.default.createElement(ColorInfo, {
+      hsl: colorData.hsl.value,
+      hsv: colorData.hsv.value,
+      image: colorData.image.bare
+    });
+  } else if (state === "error") {
+    content = _react.default.createElement("div", null, "Connection failed");
+  }
 
   return _react.default.createElement("div", null, _react.default.createElement("input", {
     value: name,
     onChange: handleChange
-  }));
+  }), content);
 }
 
-_reactDom.default.render(_react.default.createElement(Name, null), document.getElementById('root'));
+_reactDom.default.render(_react.default.createElement(FetchHex, null), document.getElementById("root"));
 },{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js"}],"../../.nvm/versions/node/v9.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -24199,7 +24260,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32919" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41503" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
