@@ -14,8 +14,8 @@ export const FetchHex= ()=>{
     setName(e.target.value);
   };
 
-  var myController = new AbortController();
-  var mySignal = myController.signal;
+  const myController = new AbortController();
+  const mySignal = myController.signal;
 
   const fetchColor = color => {
     fetch(`http://www.thecolorapi.com/id?hex=${name}`, { signal: mySignal })
