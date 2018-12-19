@@ -1,42 +1,61 @@
-import React, { useState, useEffect } from "react";
-import {ColorInfo} from "./ColorInfo.js";
+import React, { useState, useEffect, useReducer } from "react";
+import { ColorInfo } from "./ColorInfo.js";
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "input":
+      return Object.assign(state, { color: action.payload });
+    case "ready":
+      return Object.assign(state, { status: "ready" });
+    case "fetch":
+      return Object.assign(state, { status: "loading" });
+    case "success":
+      return Object.assign(state, {
+        status: "done",
+        colorData: action.payload
+      });
+    case "failure":
+      return Object.assign(state, { status: "error" });
+    default:
+      return state;
+  }
+};
 
-export const FetchHex= ()=>{
-  const [name, setName] = useState("FFFFFF");
-  const [state, setState] = useState("toLoad");
-  const [colorData, setColorData] = useState({});
+export const FetchHex = () => {
+  const [state, dispatch] = useReducer(reducer, {
+    color: "FFFFFF",
+    colorData: {},
+    status: "ready"
+  });
 
   const handleChange = function(e) {
     if (/^[a-fA-F\d]{6}$/.test(e.target.value)) {
-      setState("toLoad");
+      dispatch({ type: "ready", payload: e.target.value });
     }
-    setName(e.target.value);
+    dispatch({ type: "input", payload: e.target.value });
   };
 
   const myController = new AbortController();
   const mySignal = myController.signal;
 
   const fetchColor = color => {
-    fetch(`http://www.thecolorapi.com/id?hex=${name}`, { signal: mySignal })
+    fetch(`http://www.thecolorapi.com/id?hex=${color}`, { signal: mySignal })
       .then(response => {
-        setState("Loading");
+        dispatch({ type: "fetch" });
         return response.json();
       })
       .then(res => {
-        setColorData(res);
-        setState("Ready");
+        dispatch({ type: "success", payload: res });
       })
       .catch(err => {
-        setState("error");
+        dispatch({ type: "failure" });
       });
   };
 
   useEffect(() => {
-    if (state === "toLoad") {
-      fetchColor();
+    if (state.status === "ready") {
+      fetchColor(state.color);
     }
-
     return function cleanup() {
       myController.abort();
     };
@@ -44,24 +63,24 @@ export const FetchHex= ()=>{
 
   let content = null;
 
-  if (state === "Loading") {
+  if (state.status === "loading") {
     content = <div>Loading...</div>;
-  } else if (state === "Ready") {
+  } else if (state.status === "done") {
     content = (
       <ColorInfo
-        hsl={colorData.hsl.value}
-        hsv={colorData.hsv.value}
-        image={colorData.image.bare}
+        hsl={state.colorData.hsl.value}
+        hsv={state.colorData.hsv.value}
+        image={state.colorData.image.bare}
       />
     );
-  } else if (state === "error") {
+  } else if (state.status === "error") {
     content = <div>Connection failed</div>;
   }
 
   return (
     <div>
-      <input value={name} onChange={handleChange} />
+      <input value={state.color} onChange={handleChange} />
       {content}
     </div>
   );
-}
+};

@@ -24178,41 +24178,43 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var reducer = function reducer(state, action) {
-  switch (action.type) {
-    case "input":
-      return Object.assign(state, {
-        color: action.payload
-      });
+function ReducerFactory(initialState) {
+  var reducer = function reducer(state, action) {
+    switch (action.type) {
+      case "init":
+        return initialState;
 
-    case "ready":
-      return Object.assign(state, {
-        status: "ready"
-      });
+      case "input":
+        return Object.assign(state, {
+          color: action.payload
+        });
 
-    case "fetch":
-      return Object.assign(state, {
-        status: "loading"
-      });
+      case "fetch":
+        return Object.assign(state, {
+          status: "loading"
+        });
 
-    case "success":
-      return Object.assign(state, {
-        status: "done",
-        colorData: action.payload
-      });
+      case "success":
+        return Object.assign(state, {
+          status: "done",
+          colorData: action.payload
+        });
 
-    case "failure":
-      return Object.assign(state, {
-        status: "error"
-      });
+      case "failure":
+        return Object.assign(state, {
+          status: "error"
+        });
 
-    default:
-      return state;
-  }
-};
+      default:
+        return state;
+    }
+  };
+
+  return reducer;
+}
 
 var FetchHex = function FetchHex() {
-  var _useReducer = (0, _react.useReducer)(reducer, {
+  var _useReducer = (0, _react.useReducer)({
     color: "FFFFFF",
     colorData: {},
     status: "ready"
@@ -24273,9 +24275,9 @@ var FetchHex = function FetchHex() {
     content = _react.default.createElement("div", null, "Loading...");
   } else if (state.status === "done") {
     content = _react.default.createElement(_ColorInfo.ColorInfo, {
-      hsl: state.colorData.hsl.value,
-      hsv: state.colorData.hsv.value,
-      image: state.colorData.image.bare
+      hsl: colorData.hsl.value,
+      hsv: colorData.hsv.value,
+      image: colorData.image.bare
     });
   } else if (state.status === "error") {
     content = _react.default.createElement("div", null, "Connection failed");
@@ -24327,7 +24329,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39413" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40617" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
@@ -24470,4 +24472,4 @@ function hmrAccept(bundle, id) {
   });
 }
 },{}]},{},["../../.nvm/versions/node/v10.14.2/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
-//# sourceMappingURL=/react-hooks.e31bb0bc.map
+//# sourceMappingURL=/index.map
